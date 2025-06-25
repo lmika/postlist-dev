@@ -24,5 +24,5 @@ jobs:
           git config --global user.name 'Leon Mika'
           git config --global user.email 'lmika@lmika.org'
           git remote add downstream git@github.com:lmika/postlist-for-micro.blog.git
-          git push downstream HEAD
+          git push downstream main
           git push downstream --tags
