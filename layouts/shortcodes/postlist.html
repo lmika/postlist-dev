@@ -1,0 +1,21 @@
+{{- $pgr := where .Site.RegularPages "Section" "ne" "" -}}
+{{- $pgr = where $pgr "Section" "not in" (slice "replies") -}}
+{{- if (.Get "categories") -}}
+    {{- range (split (.Get "categories") ",") -}}
+        {{- $pgr = (where $pgr "Params.categories" "intersect" (slice .)) -}}
+    {{- end -}}
+{{- end -}}
+{{- if (eq (.Get "order") "link-title" ) -}}
+    {{- $pgr = $pgr.ByLinkTitle -}}
+{{- end -}}
+<ul class="postlist">
+{{ range $pgr }}
+{{- if (ne .LinkTitle "") -}}
+  <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+{{- else if (ne .Summary "") -}}
+  <li><a href="{{ .RelPermalink }}">{{ .Summary | safeHTML | truncate 70 }}</a></li>
+{{- else -}}
+  <li><a href="{{ .RelPermalink }}">{{ .Content | safeHTML | truncate 70 }}</a></li>
+{{ end }}
+{{ end }}
+</ul>
