@@ -1,0 +1,8 @@
+{
+    "version": "0.2.0",
+    "title": "Postlist",
+    "description": "Shortcode for dynamically adding a list of posts",
+    "includes": [
+        "/postlist.css"
+    ]
+}
