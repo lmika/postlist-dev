@@ -1,0 +1,27 @@
+---
+name: 'deploy'
+
+on:
+  push:
+    tags:
+      - 'v1.*'
+
+jobs:
+  deploy:
+    runs-on: docker
+    steps:
+      - name: Cloning repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Push to Github
+        run: |
+          mkdir -p $HOME/.ssh
+          echo "${{ secrets.PUBLISH_TO_GITHUB_KEY }}" > $HOME/.ssh/id_rsa
+          chmod 600 $HOME/.ssh/id_rsa
+          chmod 700 $HOME/.ssh
+          git config --global user.name 'Leon Mika'
+          git config --global user.email 'lmika@lmika.org'
+          git remote set-url downstream git@github.com:lmika/postlist-for-micro.blog.git
+          git push downstream
+          git push downstream --tags
