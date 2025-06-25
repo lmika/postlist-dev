@@ -18,7 +18,8 @@ jobs:
         run: |
           mkdir -p $HOME/.ssh
           echo "${{ secrets.PUBLISH_TO_GITHUB_KEY }}" > $HOME/.ssh/id_rsa
-          chmod 600 $HOME/.ssh/id_rsa
+          ssh-keyscan -t rsa github.com >> $HOME/.ssh/known_hosts
+          chmod 600 $HOME/.ssh/*
           chmod 700 $HOME/.ssh
           git config --global user.name 'Leon Mika'
           git config --global user.email 'lmika@lmika.org'
