@@ -25,4 +25,4 @@ jobs:
           git config --global user.email 'lmika@lmika.org'
           git remote add downstream git@github.com:lmika/postlist-for-micro.blog.git
           git push downstream main
-          git push downstream --tags
+          git push downstream refs/tags/$(git name-rev --tags --name-only $(git rev-parse HEAD))
