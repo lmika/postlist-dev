@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Push tag to Github
+      - name: Setup Github remote
         run: |
           mkdir -p $HOME/.ssh
           echo "${{ secrets.PUBLISH_TO_GITHUB_KEY }}" > $HOME/.ssh/id_rsa
@@ -24,9 +24,12 @@ jobs:
           git config --global user.name 'Leon Mika'
           git config --global user.email 'lmika@lmika.org'
           git remote add downstream git@github.com:lmika/postlist-for-micro.blog.git
-          git push downstream refs/tags/$(git name-rev --tags --name-only $(git rev-parse HEAD))
       - name: Push main to Github
         run: |
           git checkout main
           git pull origin main
           git push downstream main
+      - name: Push tags to Github
+        run: |
+          git fetch origin --tags
+          git push downstream --tags          
