@@ -5,7 +5,7 @@
         {{- $pgr = (where $pgr "Params.categories" "intersect" (slice .)) -}}
     {{- end -}}
 {{- end -}}
-{{- if (eq (.Get "order") "link-title" ) -}}
+{{- if (eq (.Get "order") "alpha" ) -}}
     {{- $pgr = $pgr.ByLinkTitle -}}
 {{- end -}}
 <ul class="postlist">
