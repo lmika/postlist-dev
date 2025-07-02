@@ -5,9 +5,19 @@
         {{- $pgr = (where $pgr "Params.categories" "intersect" (slice .)) -}}
     {{- end -}}
 {{- end -}}
-{{- if (eq (.Get "order") "alpha" ) -}}
-    {{- $pgr = $pgr.ByLinkTitle -}}
+
+{{- if (ne (.Get "order") "") -}}
+    {{- $order := split (.Get "order") " " -}}
+    {{- if (eq (index $order 0) "alpha" ) -}}
+        {{- $pgr = $pgr.ByLinkTitle -}}
+    {{- else if (eq (index $order 0) "date" ) -}}
+        {{- $pgr = $pgr.ByDate -}}
+    {{- end -}}
+    {{- if (and (eq (len $order) 2) (eq (index $order 1) "desc")) -}}
+        {{- $pgr = $pgr.Reverse -}}
+    {{- end -}}
 {{- end -}}
+
 <ul class="postlist">
 {{ range $pgr }}
 {{- if (ne .LinkTitle "") -}}
