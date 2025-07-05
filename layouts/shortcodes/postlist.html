@@ -35,7 +35,7 @@
       <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
     {{- else if (ne .Summary "") -}}
       <li><a href="{{ .RelPermalink }}">{{ .Summary | safeHTML | truncate 70 }}</a></li>
-    {{- e\lse -}}
+    {{- else -}}
       <li><a href="{{ .RelPermalink }}">{{ .Content | safeHTML | truncate 70 }}</a></li>
     {{ end }}
     {{ end }}
