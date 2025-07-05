@@ -24,7 +24,7 @@
 
 {{- if (eq (.Get "display") "content") -}}
     {{ if templates.Exists "partials/_postlist/post-content-before.html" }}
-      {{ partial "partials/_postlist/post-content-before.html" . }}
+      {{ partial "partials/_postlist/post-content-before.html" $pgr }}
     {{ end }}
     <div class="postlist postlist-display-content h-feed">
     {{ range $pgr }}
@@ -32,8 +32,8 @@
     {{ end }}
     </div>
     {{ if templates.Exists "partials/_postlist/post-content-after.html" }}
-      {{ partial "partials/_postlist/post-content-after.html" . }}
-    {{ end }}    
+      {{ partial "partials/_postlist/post-content-after.html" $pgr }}
+    {{ end }}
 {{- else -}}
     <ul class="postlist">
     {{ range $pgr }}
