@@ -23,11 +23,17 @@
 {{- end -}}
 
 {{- if (eq (.Get "display") "content") -}}
+    {{ if templates.Exists "partials/_postlist/post-content-before.html" }}
+      {{ partial "partials/_postlist/post-content-before.html" . }}
+    {{ end }}
     <div class="postlist postlist-display-content h-feed">
     {{ range $pgr }}
         {{ partial "_postlist/post-content.html" . }}
     {{ end }}
     </div>
+    {{ if templates.Exists "partials/_postlist/post-content-after.html" }}
+      {{ partial "partials/_postlist/post-content-after.html" . }}
+    {{ end }}    
 {{- else -}}
     <ul class="postlist">
     {{ range $pgr }}
