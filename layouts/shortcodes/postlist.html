@@ -18,14 +18,26 @@
     {{- end -}}
 {{- end -}}
 
-<ul class="postlist">
-{{ range $pgr }}
-{{- if (ne .LinkTitle "") -}}
-  <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
-{{- else if (ne .Summary "") -}}
-  <li><a href="{{ .RelPermalink }}">{{ .Summary | safeHTML | truncate 70 }}</a></li>
+{{- if (ne (.Get "limit") "") -}}
+    {{- $pgr = $pgr.Limit (int (.Get "limit")) -}}
+{{- end -}}
+
+{{- if (eq (.Get "display") "content") -}}
+    <div class="postlist postlist-display-content h-feed">
+    {{ range $pgr }}
+        {{ partial "_postlist/post-content.html" . }}
+    {{ end }}
+    </div>
 {{- else -}}
-  <li><a href="{{ .RelPermalink }}">{{ .Content | safeHTML | truncate 70 }}</a></li>
-{{ end }}
-{{ end }}
-</ul>
+    <ul class="postlist">
+    {{ range $pgr }}
+    {{- if (ne .LinkTitle "") -}}
+      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+    {{- else if (ne .Summary "") -}}
+      <li><a href="{{ .RelPermalink }}">{{ .Summary | safeHTML | truncate 70 }}</a></li>
+    {{- e\lse -}}
+      <li><a href="{{ .RelPermalink }}">{{ .Content | safeHTML | truncate 70 }}</a></li>
+    {{ end }}
+    {{ end }}
+    </ul>
+{{- end -}}
