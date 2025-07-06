@@ -29,7 +29,7 @@
     <div class="postlist postlist-display-content h-feed">
     {{ range $pgr }}
       {{ if templates.Exists "partials/_postlist/post-content.html" }}
-        {{ partial "_postlist/post-content.html" $pgr }}
+        {{ partial "_postlist/post-content.html" . }}
       {{ else }}
         <div class="h-entry">
         {{ if .Title }}
