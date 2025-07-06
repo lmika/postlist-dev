@@ -24,15 +24,36 @@
 
 {{- if (eq (.Get "display") "content") -}}
     {{ if templates.Exists "partials/_postlist/post-content-before.html" }}
-      {{ partial "partials/_postlist/post-content-before.html" $pgr }}
+      {{ partial "_postlist/post-content-before.html" $pgr }}
     {{ end }}
     <div class="postlist postlist-display-content h-feed">
     {{ range $pgr }}
-        {{ partial "_postlist/post-content.html" . }}
+      {{ if templates.Exists "partials/_postlist/post-content.html" }}
+        {{ partial "_postlist/post-content.html" $pgr }}
+      {{ else }}
+        <div class="h-entry">
+        {{ if .Title }}
+            <h2 class="p-name"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+            {{ if .Params.custom_summary }}
+            <div class="p-summary">
+                <p>{{ .Summary | safeHTML }}<p>
+            </div>
+            {{ else }}
+                <div class="e-content">
+                    {{ .Content }}
+                </div>
+            {{ end }}
+        {{ else }}
+            <div class="e-content">
+                {{ .Content }}
+            </div>
+        {{ end }}
+        </div>    
+      {{ end }}
     {{ end }}
     </div>
     {{ if templates.Exists "partials/_postlist/post-content-after.html" }}
-      {{ partial "partials/_postlist/post-content-after.html" $pgr }}
+      {{ partial "_postlist/post-content-after.html" $pgr }}
     {{ end }}
 {{- else -}}
     <ul class="postlist">
