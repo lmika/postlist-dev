@@ -6,7 +6,7 @@
     {{- end -}}
 {{- end -}}
 {{- if (.Get "title-matches") -}}
-    {{- $pgr = (where $pgr "Params.title" "like" (.Get "title-matches") -}}
+    {{- $pgr = (where $pgr "Params.title" "like" (.Get "title-matches")) -}}
 {{- end -}}
 
 {{- if (ne (.Get "order") "") -}}
