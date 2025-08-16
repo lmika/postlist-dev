@@ -1,18 +1,26 @@
+{{- $parCategories := or (and .Params (.Get "categories")) "" -}}
+{{- $parTitleMatches := or (and .Params (.Get "title-matches")) "" -}}
+{{- $parOrder := or (and .Params (.Get "order")) "" -}}
+{{- $parLimit := or (and .Params (.Get "limit")) "" -}}
+{{- $parDisplay := or (and .Params (.Get "display")) "" -}}
+
 {{- $pgr := where .Site.RegularPages "Section" "ne" "" -}}
 {{- $pgr = where $pgr "Section" "not in" (slice "replies") -}}
-{{- if (.Get "categories") -}}
-    {{- range (split (.Get "categories") ",") -}}
+
+{{- if (ne $parCategories "") -}}
+    {{- range (split $parCategories ",") -}}
         {{- $pgr = (where $pgr "Params.categories" "intersect" (slice .)) -}}
     {{- end -}}
 {{- end -}}
-{{- if (.Get "title-matches") -}}
-    {{- $pgr = (where $pgr "Params.title" "like" (.Get "title-matches")) -}}
+
+{{- if (ne $parTitleMatches "") -}}
+    {{- $pgr = (where $pgr "Params.title" "like" $parTitleMatches) -}}
 {{- end -}}
 
-{{- if (ne (.Get "order") "") -}}
-    {{- $order := split (.Get "order") " " -}}
+{{- if (ne $parOrder "") -}}
+    {{- $order := split $parOrder " " -}}
     {{- if (eq (index $order 0) "alpha" ) -}}
-        {{- $pgr = $pgr.ByLinkTitle -}}
+        {{- $pgr = $pgr.ByTitle -}}
     {{- else if (eq (index $order 0) "date" ) -}}
         {{- $pgr = $pgr.ByDate -}}
     {{- end -}}
@@ -21,11 +29,11 @@
     {{- end -}}
 {{- end -}}
 
-{{- if (ne (.Get "limit") "") -}}
-    {{- $pgr = $pgr.Limit (int (.Get "limit")) -}}
+{{- if (ne $parLimit "") -}}
+    {{- $pgr = $pgr.Limit (int $parLimit) -}}
 {{- end -}}
 
-{{- if (eq (.Get "display") "content") -}}
+{{- if (eq $parDisplay "content") -}}
     {{ if templates.Exists "partials/_postlist/post-content-before.html" }}
       {{ partial "_postlist/post-content-before.html" $pgr }}
     {{ end }}
