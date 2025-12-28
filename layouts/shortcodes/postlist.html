@@ -3,6 +3,7 @@
 {{- $parOrder := or (and .Params (.Get "order")) "" -}}
 {{- $parLimit := or (and .Params (.Get "limit")) "" -}}
 {{- $parDisplay := or (and .Params (.Get "display")) "" -}}
+{{- $parSummaries := or (and .Params (.Get "summaries")) "if-available" -}}
 
 {{- $pgr := where .Site.RegularPages "Section" "ne" "" -}}
 {{- $pgr = where $pgr "Section" "not in" (slice "replies") -}}
@@ -45,7 +46,7 @@
         <div class="h-entry">
         {{ if .Title }}
             <h2 class="p-name"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
-            {{ if .Params.custom_summary }}
+            {{ if and (ne $parSummaries "none") .Params.custom_summary }}
             <div class="p-summary">
                 <p>{{ .Summary | safeHTML }}<p>
             </div>
@@ -71,7 +72,7 @@
     {{ range $pgr }}
     {{- if (ne .LinkTitle "") -}}
       <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
-    {{- else if (ne .Summary "") -}}
+    {{- else if and (ne $parSummaries "none") (ne .Summary "") -}}
       <li><a href="{{ .RelPermalink }}">{{ .Summary | safeHTML | truncate 70 }}</a></li>
     {{- else -}}
       <li><a href="{{ .RelPermalink }}">{{ .Content | safeHTML | truncate 70 }}</a></li>
