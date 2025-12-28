@@ -3,7 +3,7 @@
 {{- $parOrder := or (and .Params (.Get "order")) "" -}}
 {{- $parLimit := or (and .Params (.Get "limit")) "" -}}
 {{- $parDisplay := or (and .Params (.Get "display")) "" -}}
-{{- $parSummaries := or (and .Params (.Get "summaries")) "if-available" -}}
+{{- $parContentOptions := split (or (and .Params (.Get "content-options")) "") " " -}}
 
 {{- $pgr := where .Site.RegularPages "Section" "ne" "" -}}
 {{- $pgr = where $pgr "Section" "not in" (slice "replies") -}}
@@ -34,6 +34,8 @@
     {{- $pgr = $pgr.Limit (int $parLimit) -}}
 {{- end -}}
 
+{{- $showSummary := not (in $parContentOptions "no-summary") -}}
+
 {{- if (eq $parDisplay "content") -}}
     {{ if templates.Exists "partials/_postlist/post-content-before.html" }}
       {{ partial "_postlist/post-content-before.html" $pgr }}
@@ -46,7 +48,7 @@
         <div class="h-entry">
         {{ if .Title }}
             <h2 class="p-name"><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
-            {{ if and (ne $parSummaries "none") .Params.custom_summary }}
+            {{ if and $showSummary .Params.custom_summary }}
             <div class="p-summary">
                 <p>{{ .Summary | safeHTML }}<p>
             </div>
@@ -72,7 +74,7 @@
     {{ range $pgr }}
     {{- if (ne .LinkTitle "") -}}
       <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
-    {{- else if and (ne $parSummaries "none") (ne .Summary "") -}}
+    {{- else if and $showSummary (ne .Summary "") -}}
       <li><a href="{{ .RelPermalink }}">{{ .Summary | safeHTML | truncate 70 }}</a></li>
     {{- else -}}
       <li><a href="{{ .RelPermalink }}">{{ .Content | safeHTML | truncate 70 }}</a></li>
